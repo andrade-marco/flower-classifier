@@ -1,3 +1,4 @@
 # Folders
 flowers/
 __pycache__/
+*.pth

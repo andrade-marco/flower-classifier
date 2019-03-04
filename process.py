@@ -10,7 +10,7 @@ import torch
 from PIL import Image
 
 #Parse input arguments
-def parse_inputs():
+def parse_inputs(predict=False):
     """
     Function to retrieve the command line arguments passed by the user. These
     arguments are used to set up the training of the model/neural network.
@@ -28,14 +28,24 @@ def parse_inputs():
         parse_args() - Command line args object
     """
     parser = argparse.ArgumentParser()
-    parser.add_argument("data_dir", default="flowers")
-    parser.add_argument("--save_dir", type=str, default="")
-    parser.add_argument("--arch", type=str, default="vgg11")
-    parser.add_argument("--learning_rate", type=float, default=0.02)
-    parser.add_argument("--hidden_units", type=int, default=1024)
-    parser.add_argument("--epochs", type=int, default=30)
-    parser.add_argument("--gpu", action="store_true")
 
+    if predict:
+        parser.add_argument("path")
+        parser.add_argument("checkpoint",
+                            default="checkpoint_vgg11.pth")
+        parser.add_argument("--top_k", type=int, default=5)
+        parser.add_argument("--category_names",
+                            type=str,
+                            default="cat_to_name.json")
+    else:
+        parser.add_argument("data_dir", default="flowers")
+        parser.add_argument("--save_dir", type=str, default="")
+        parser.add_argument("--arch", type=str, default="vgg11")
+        parser.add_argument("--learning_rate", type=float, default=0.02)
+        parser.add_argument("--hidden_units", type=int, default=1024)
+        parser.add_argument("--epochs", type=int, default=30)
+
+    parser.add_argument("--gpu", action="store_true")
     return parser.parse_args()
 
 

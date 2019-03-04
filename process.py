@@ -7,6 +7,7 @@
 import argparse
 import numpy as np
 import torch
+from torchvision import datasets, transforms, models
 from PIL import Image
 
 #Parse input arguments
@@ -47,6 +48,41 @@ def parse_inputs(predict=False):
 
     parser.add_argument("--gpu", action="store_true")
     return vars(parser.parse_args())
+
+# Get data loaders - train, validation, test
+def get_data_loaders(dir):
+    # Normalization parameters
+    means = [0.485, 0.456, 0.406]
+    std_devs = [0.229, 0.224, 0.225]
+
+    train_dir = dir + '/train'
+    valid_dir = dir + '/valid'
+    test_dir = dir + '/test'
+
+    # Define your transforms for the training, validation, and testing sets
+    train_transform = transforms.Compose([
+        transforms.RandomRotation(35),
+        transforms.RandomResizedCrop(224),
+        transforms.RandomHorizontalFlip(),
+        transforms.ToTensor(),
+        transforms.Normalize(means, std_devs)])
+    common_transform = transforms.Compose([
+        transforms.Resize(255),
+        transforms.CenterCrop(224),
+        transforms.ToTensor(),
+        transforms.Normalize(means, std_devs)])
+
+    # Load the datasets with ImageFolder
+    train_set = datasets.ImageFolder(train_dir, transform=train_transform)
+    valid_set = datasets.ImageFolder(valid_dir, transform=common_transform)
+    test_set = datasets.ImageFolder(test_dir, transform=common_transform)
+
+    # Using the image datasets and the trainforms, define the dataloaders
+    train_loader = torch.utils.data.DataLoader(train_set, batch_size=64, shuffle=True)
+    valid_loader = torch.utils.data.DataLoader(valid_set, batch_size=64)
+    test_loader = torch.utils.data.DataLoader(valid_set, batch_size=64)
+
+    return (train_loader, valid_loader, test_loader)
 
 
 #Process image

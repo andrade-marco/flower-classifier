@@ -41,7 +41,7 @@ def parse_inputs(predict=False):
         parser.add_argument("data_dir", default="flowers")
         parser.add_argument("--save_dir", type=str, default="")
         parser.add_argument("--arch", type=str, default="vgg11")
-        parser.add_argument("--learn_rate", type=float, default=0.02)
+        parser.add_argument("--learn_rate", type=float, default=0.002)
         parser.add_argument("--hidden_units", type=int, default=1024)
         parser.add_argument("--epochs", type=int, default=30)
 

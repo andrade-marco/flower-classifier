@@ -9,7 +9,7 @@ from process import parse_inputs
 #Main
 def main():
     args = parse_inputs()
-    print(args.arch)
+    print(args)
 
 # Run main function
 if __name__ == '__main__':

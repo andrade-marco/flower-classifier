@@ -25,7 +25,7 @@ def parse_inputs(predict=False):
     Params:
         None
     Returns:
-        parse_args() - Command line args object
+        vars(parse_args()) - Dictionary containing command line args
     """
     parser = argparse.ArgumentParser()
 
@@ -41,12 +41,12 @@ def parse_inputs(predict=False):
         parser.add_argument("data_dir", default="flowers")
         parser.add_argument("--save_dir", type=str, default="")
         parser.add_argument("--arch", type=str, default="vgg11")
-        parser.add_argument("--learning_rate", type=float, default=0.02)
+        parser.add_argument("--learn_rate", type=float, default=0.02)
         parser.add_argument("--hidden_units", type=int, default=1024)
         parser.add_argument("--epochs", type=int, default=30)
 
     parser.add_argument("--gpu", action="store_true")
-    return parser.parse_args()
+    return vars(parser.parse_args())
 
 
 #Process image

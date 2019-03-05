@@ -131,7 +131,7 @@ def train_model(model, train_loader, valid_loader, learn_rate, epochs, gpu):
             running_loss = 0
             model.train()
     print("Training completed!")
-    print(40 * "-")
+    print(40 * "-", end="\n\n")
 
 
 def test_model(model, test_loader, gpu):
@@ -140,6 +140,7 @@ def test_model(model, test_loader, gpu):
     if torch.cuda.is_available() and gpu:
         device = "cuda"
 
+    print("Testing model...")
     test_accuracy = 0
     with torch.no_grad():
         model.eval()
@@ -157,6 +158,8 @@ def test_model(model, test_loader, gpu):
 
             #Show results
             print("Test accuracy: {}".format(norm_test_accuracy))
+    print("Testing completed")
+    print(40 * "-", end="\n\n")
 
 
 # Reload model

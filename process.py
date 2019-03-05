@@ -47,7 +47,7 @@ def parse_inputs(predict=False):
         parser.add_argument("--epochs", type=int, default=30)
 
     parser.add_argument("--gpu", action="store_true")
-    return vars(parser.parse_args())
+    return parser.parse_args()
 
 # Get data loaders - train, validation, test
 def get_data_loaders(dir):
@@ -82,7 +82,8 @@ def get_data_loaders(dir):
     valid_loader = torch.utils.data.DataLoader(valid_set, batch_size=64)
     test_loader = torch.utils.data.DataLoader(valid_set, batch_size=64)
 
-    return (train_loader, valid_loader, test_loader)
+    return { "train_set": train_set,
+             "loaders": (train_loader, valid_loader, test_loader)}
 
 
 #Process image

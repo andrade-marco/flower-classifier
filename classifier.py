@@ -28,8 +28,15 @@ def build_model(arch, inputs, hidden_units, output, rate):
     #Check if arch is valid and load the correct model
     model_options = ["vgg11", "vgg13", "vgg19"]
     if arch in model_options:
-        model = models[arch](pretrained=True)
+        print("Building model ---> arch: {}".format(arch))
+        if arch == "vgg19":
+            model = models.vgg19(pretrained=True)
+        elif arch == "vgg13":
+            model = models.vgg13(pretrained=True)
+        else:
+            model = models.vgg11(pretrained=True)
     else:
+        print("Invalid model: {} --> Using arch: vgg11".format(arch))
         model = models.vgg11(pretrained=True)
 
     #Freezes gradients
@@ -135,21 +142,21 @@ def test_model(model, test_loader, gpu):
 
     test_accuracy = 0
     with torch.no_grad():
-    model.eval()
-    for inputs, labels in test_loader:
-        # As before, move the variables to same device as model
-        inputs, labels = inputs.to(device), labels.to(device)
+        model.eval()
+        for inputs, labels in test_loader:
+            # As before, move the variables to same device as model
+            inputs, labels = inputs.to(device), labels.to(device)
 
-        # Forward pass and measuring accuracy
-        test_log_ps = model.forward(inputs)
-        ps = torch.exp(test_log_ps)
-        top_ps, top_class = ps.topk(1, dim=1)
-        equals = top_class == labels.view(*top_class.shape)
-        test_accuracy += torch.mean(equals.type(torch.FloatTensor)).item()
-        norm_test_accuracy = test_accuracy/len(test_loader)
+            # Forward pass and measuring accuracy
+            test_log_ps = model.forward(inputs)
+            ps = torch.exp(test_log_ps)
+            top_ps, top_class = ps.topk(1, dim=1)
+            equals = top_class == labels.view(*top_class.shape)
+            test_accuracy += torch.mean(equals.type(torch.FloatTensor)).item()
+            norm_test_accuracy = test_accuracy/len(test_loader)
 
-        #Show results
-        print("Test accuracy: {}".format(norm_test_accuracy))
+            #Show results
+            print("Test accuracy: {}".format(norm_test_accuracy))
 
 
 # Reload model

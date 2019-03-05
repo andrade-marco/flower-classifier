@@ -4,6 +4,7 @@
 # generate predictions
 
 #Modules import
+import torch
 from torch import nn
 from torch import optim
 from torchvision import datasets, transforms, models
@@ -58,10 +59,12 @@ def build_model(arch, inputs, hidden_units, output, rate):
 
 #Training model
 def train_model(model, train_loader, valid_loader, learn_rate, epochs, gpu):
-    # Define whether to use GPU or CPU
+    # Define whether to use GPU or CPU and move model
     device = "cpu"
     if torch.cuda.is_available() and gpu:
         device = "cuda"
+
+    model.to(device)
 
     # Configure loss function and optimiter for backprop steps
     # Only the classifier is to be trained
@@ -139,6 +142,8 @@ def test_model(model, test_loader, gpu):
     device = "cpu"
     if torch.cuda.is_available() and gpu:
         device = "cuda"
+
+    model.to(device)
 
     print("Testing model...")
     test_accuracy = 0

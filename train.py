@@ -4,6 +4,7 @@
 #images into the different flower categories
 
 #Module imports
+import torch
 from process import parse_inputs, get_data_loaders
 from classifier import build_model, train_model, test_model
 
@@ -12,8 +13,8 @@ def main():
     args = parse_inputs()
 
     # Get data loaders for training and build the model
-    loaders = get_data_loaders(args.data_dir)["sets"]
-    train_set = loaders["set"]
+    loaders = get_data_loaders(args.data_dir)
+    train_set = loaders["train_set"]
     train, valid, test = loaders["loaders"]
     model = build_model(args.arch, None, args.hidden_units, None, None)
 

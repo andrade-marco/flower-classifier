@@ -60,10 +60,7 @@ def build_model(arch, inputs, hidden_units, output, rate):
 #Training model
 def train_model(model, train_loader, valid_loader, learn_rate, epochs, gpu):
     # Define whether to use GPU or CPU and move model
-    device = "cpu"
-    if torch.cuda.is_available() and gpu:
-        device = "cuda"
-
+    device = get_device(gpu)
     model.to(device)
 
     # Configure loss function and optimiter for backprop steps
@@ -139,10 +136,7 @@ def train_model(model, train_loader, valid_loader, learn_rate, epochs, gpu):
 
 def test_model(model, test_loader, gpu):
     # Define whether to use GPU or CPU
-    device = "cpu"
-    if torch.cuda.is_available() and gpu:
-        device = "cuda"
-
+    device = get_device(gpu)
     model.to(device)
 
     print("Testing model...")
@@ -168,7 +162,7 @@ def test_model(model, test_loader, gpu):
 
 
 # Reload model
-def load_checkpoint(filepath):
+def load_checkpoint(filepath, gpu):
     """
     Function to load model checkpoint
     Params:
@@ -176,11 +170,11 @@ def load_checkpoint(filepath):
     Returns:
         model - Model loaded according to checkpoint specs
     """
-    checkpoint = torch.load(filepath)
+    device = get_device(gpu)
+    checkpoint = torch.load(filepath, map_location=device)
 
-    arch, fc1_input, fc1_output, fc2_output, dp_rate = checkpoint
     model = build_model(
-        checkpoint["arch"],
+        "vgg11",
         checkpoint["fc1_input"],
         checkpoint["fc1_output"],
         checkpoint["fc2_output"],
@@ -192,12 +186,16 @@ def load_checkpoint(filepath):
 
 
 #Predicting image
-def predict(image_path, model, topk):
+def predict(img, model, topk, gpu):
     '''
     Predict the class (or classes) of an image using a trained deep learning model.
     '''
-    # Get transformed image
-    img = process_image(image_path)
+    # Move model and image to appropriate device
+    device = get_device(gpu)
+    model.to(device)
+    img.to(device)
+
+    # Reshape image
     img = img.reshape(-1, img.shape[0], img.shape[1], img.shape[2])
 
     #Turn off gradients and get output from model
@@ -208,3 +206,11 @@ def predict(image_path, model, topk):
     top_ps, top_class = ps.topk(topk)
 
     return (top_ps.numpy().squeeze(), top_class.numpy().squeeze())
+
+#Get device
+def get_device(gpu):
+    device = "cpu"
+    if torch.cuda.is_available() and gpu:
+        device = "cuda"
+
+    return device

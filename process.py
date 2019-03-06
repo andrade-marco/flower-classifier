@@ -6,6 +6,7 @@
 #Module imports
 import argparse
 import numpy as np
+import matplotlib.pyplot as plt
 import torch
 from torchvision import datasets, transforms, models
 from PIL import Image
@@ -32,8 +33,7 @@ def parse_inputs(predict=False):
 
     if predict:
         parser.add_argument("path")
-        parser.add_argument("checkpoint",
-                            default="checkpoint_vgg11.pth")
+        parser.add_argument("checkpoint")
         parser.add_argument("--top_k", type=int, default=5)
         parser.add_argument("--category_names",
                             type=str,

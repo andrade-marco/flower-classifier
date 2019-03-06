@@ -174,7 +174,7 @@ def load_checkpoint(filepath, gpu):
     checkpoint = torch.load(filepath, map_location=device)
 
     model = build_model(
-        "vgg11",
+        checkpoint["arch"],
         checkpoint["fc1_input"],
         checkpoint["fc1_output"],
         checkpoint["fc2_output"],

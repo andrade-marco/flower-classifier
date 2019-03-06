@@ -192,7 +192,6 @@ def predict(img, model, topk, gpu):
     '''
     # Move model and image to appropriate device
     device = get_device(gpu)
-    model.to(device)
     img.to(device)
 
     # Reshape image

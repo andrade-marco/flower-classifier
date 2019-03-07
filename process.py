@@ -126,6 +126,10 @@ def imshow(image, ax=None, title=None):
         image - Tensor containing image data
         ax - Axis object
         title - Image title
+
+    NOTE: This function was already included in the Jupyter Notebook for part 1
+    of the project. It was included here for testing the rendering of images
+    from terminal commands
     """
     if ax is None:
         fig, ax = plt.subplots()
